@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 ## 使い方
 
 1. 右の **Releases** から `video-dev-standard-assy.zip` をダウンロードして、展開する(このページの 4 ファイルを 1 つずつ保存しても、同じです)
-2. Copilot Chat の画面の左上のモード表示を **Think Deeper** にして(「自動」では動かないことがあります)、次の **3 つを、1 回のメッセージに添付**して、「この資料に従って、始めてください」と送る
+2. Copilot Chat の画面の左上のモード表示を **GPT の Think Deeper**(表示は「GPT-5.6 Sol Think Deeper」など)にして(「自動」では動かないことがあります)、次の **3 つを、1 回のメッセージに添付**して、「この資料に従って、始めてください」と送る
    - `01_procedure.md`
    - `02_reference.md`
    - `03_plan_and_progress.md`
