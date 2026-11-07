@@ -12,7 +12,7 @@ Microsoft 365 Copilot Chat(ベーシック。Microsoft 365 のライセンスに
 ## 使い方
 
 1. Releases から `video-dev-standard-assy.zip` をダウンロードして、展開する
-2. Copilot Chat のモードを、メニューの **GPT の Think Deeper** にする(選ぶと、左上の表示は「GPT-5.6 Sol 考える」になります。モデル名は 2026年11月7日時点)
+2. Copilot Chat のモードを、メニューの **GPT の Think Deeper** にする(選ぶと、左上の表示は「GPT-5.6 Sol 考える」になります。モデルの名前や表示は最近変わったため、環境によっては違うことがあります。2026年11月7日時点)
 3. `01_procedure.md` `02_reference.md` `03_plan_and_progress.md` を、1 回のメッセージに添付して、「この資料に従って、始めてください」と送る
 4. 質問に答えて、構成案に OK を出すと、動画ができる
 5. 作れなかったときは、次のメッセージに `00_make_video.py` を添付して、「続けてください」と送る
