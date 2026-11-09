@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 
 # 動画開発標準Assy
 
-Microsoft Copilot Chat(旧称 Microsoft 365 Copilot Chat。ベーシック。Microsoft 365 のライセンスに含まれ、追加のライセンスが要らないもの。名称は最近変わりました。2026年11月7日時点)では、MP4 は、入力の対象になっていません。
+Microsoft Copilot Chat(旧称 Microsoft 365 Copilot Chat。Basic。Microsoft 365 のライセンスに含まれ、追加のライセンスが要らないもの。名称は最近変わりました。2026年11月7日時点)では、MP4 は、入力の対象になっていません。
 この標準は、コードインタープリターを使って、**MP4 の説明動画を書き出させる方法**を、3 つのファイルにまとめたものです。
 「標準」としているのは、組織の中で、誰が使っても、一定の安定した出力が得られるようにするためです。
 
