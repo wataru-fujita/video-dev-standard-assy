@@ -1,11 +1,11 @@
-# ===== CODE BEGIN v3.4-auto =====
+# ===== CODE BEGIN v3.5-auto =====
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 wataru_fujita
 import os, sys, json, math, time, glob, shutil, subprocess, tempfile, wave
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-TEMPLATE_VERSION = "v3.4-auto"
+TEMPLATE_VERSION = "v3.5-auto"
 
 # ---------- 0. 設定の検証(設定は、信頼できない入力として扱う。許可したものだけを通し、違反したら実行せずに STOP) ----------
 # 環境変数 MKV_CONFIG と、設定ブロックの値の両方を検証する。ファイル名・FPS・長さ・文字数・キーは、ここで固定する。
@@ -28,7 +28,7 @@ def _check_scenes(scenes):
         if not (isinstance(s, dict) and all(isinstance(k, str) for k in s) and set(s).issubset(_SCENE_KEYS)): _stop(w + "許可されていないキーがあります")
         if s.get("type") not in ("hero", "cards", "list", "cta"): _stop(w + "type は hero / cards / list / cta のいずれか")
         sec = s.get("sec")
-        if not (_is_num(sec) and _le(1, sec) and _le(sec, 60)): _stop(w + "sec は 1〜60 の数")
+        if not (_is_int(sec) and _le(1, sec) and _le(sec, 60)): _stop(w + "sec は 1〜60 の整数")
         total = total + sec
         for k in ("chip", "title", "illust", "sub", "caption", "button", "toast"):
             if k in s and not _is_text(s[k], 120): _stop(w + k + " は 120 文字以内の文字列")
@@ -40,6 +40,10 @@ def _check_scenes(scenes):
                 if not (isinstance(c, dict) and set(c).issubset(_CARD_KEYS) and all(_is_text(v, 200) for v in c.values())): _stop(w + "cards の中身が、許可された形ではありません")
         if "items" in s and not (isinstance(s["items"], list) and len(s["items"]) in range(0, 9) and all(_is_text(v, 120) for v in s["items"])): _stop(w + "items は 8 件まで・各 120 文字以内")
         if "icons" in s and not (isinstance(s["icons"], list) and len(s["icons"]) in range(0, 9) and all(_is_text(v, 40) for v in s["icons"])): _stop(w + "icons は 8 件まで・各 40 文字以内")
+        if not ("title" in s and "caption" in s): _stop(w + "title と caption が必要です")
+        if s["type"] == "cards" and not (isinstance(s.get("cards"), list) and len(s["cards"]) in range(1, 7) and all("head" in c and "body" in c for c in s["cards"])): _stop(w + "cards は 1〜6 件で、各カードに head と body が必要です")
+        if s["type"] == "list" and not (isinstance(s.get("items"), list) and len(s["items"]) in range(1, 9)): _stop(w + "items は 1〜8 件が必要です")
+        if "focus" in s and s["type"] in ("cards", "list") and s["focus"] not in range(len(s["cards"] if s["type"] == "cards" else s["items"])): _stop(w + "focus は、カード・項目の数の範囲内の番号(0 始まり)")
     if not _le(total, 180): _stop("場面の秒数の合計は 180 秒まで(実行時間の上限のため)")
 def _check_settings():
     if not (isinstance(OUT_NAME, str) and re.fullmatch(r"(?!-)[\w\-]{1,60}\.mp4", OUT_NAME)): _stop("OUT_NAME は、文字・数字・- ・_ の 60 文字以内 + .mp4 だけ(フォルダの指定や、途中の . は不可)")
@@ -1032,7 +1036,7 @@ chk("MP4の平均音量(実測)", mv is not None and LE(-28, mv) and LE(mv, -14)
 chk("MP4の最大音量(実測)", xv is not None and LE(-10, xv) and LE(xv, -1.0), xv, "-10〜-1 dB(小さすぎず、割れない)")
 chk("音声の形式", bool(a) and str(a.get("channels")) == "2" and str(a.get("sample_rate")) == "44100", a and (a.get("channels"), a.get("sample_rate")), "ステレオ・44100Hz")
 def decode_frame(idx):
-    r = subprocess.run([FF, "-v", "error", "-i", final, "-vf", "select=eq(n\," + str(idx) + ")", "-vframes", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+    r = subprocess.run([FF, "-v", "error", "-i", final, "-vf", "select=eq(n\\," + str(idx) + ")", "-vframes", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
                        capture_output=True)
     return np.frombuffer(r.stdout, dtype=np.uint8) if len(r.stdout) == W * H * 3 else None
 psnrs = []
@@ -1082,4 +1086,4 @@ for c in checks:
 fails = [c[0] for c in checks if c[1] != "PASS"]
 print("\n総合:", "全項目合格" if not fails else "不合格 " + ", ".join(fails))
 print(f"出力: {OUT_NAME} / 映像の書き出し {time.time()-t_start:.1f}秒 / フレーム {n}")
-# ===== CODE END v3.4-auto =====
+# ===== CODE END v3.5-auto =====
